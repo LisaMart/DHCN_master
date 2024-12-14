@@ -8,7 +8,7 @@ import numpy as np
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', default='sample', help='dataset name: diginetica/Tmall/sample')
+parser.add_argument('--dataset', default='diginetica', help='dataset name: diginetica/Tmall/sample')
 parser.add_argument('--epoch', type=int, default=30, help='number of epochs to train for')
 parser.add_argument('--batchSize', type=int, default=100, help='input batch size')
 parser.add_argument('--embSize', type=int, default=100, help='embedding size')
