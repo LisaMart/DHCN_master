@@ -25,20 +25,12 @@ def pad_data(data, max_len=50, pad_value=0):
     """
     processed_data = []
     for i, session in enumerate(data):
-        # Печать только первых 10 сессий для отладки
-        if i < 10:
-            print(f"Session {i + 1} length before padding: {len(session)}")
-
         if len(session) < max_len:
             # Добавляем padding, если сессия меньше max_len
             session = session + [pad_value] * (max_len - len(session))
         else:
             # Обрезаем, если сессия больше max_len
             session = session[:max_len]
-
-        if i < 10:
-            print(f"Session {i + 1} length after padding: {len(session)}")
-
         processed_data.append(session)
 
     return np.array(processed_data, dtype=object)
