@@ -77,16 +77,16 @@ def main():
     train_data = check_and_fix_data_integrity(train_data, n_node)
     test_data = check_and_fix_data_integrity(test_data, n_node)
 
-    check_indices_before_padding(train_data)  # Для тренировочных данных
-    check_indices_before_padding(test_data)  # Для тестовых данных
+    check_indices_before_padding(train_data, max_sessions=10)
+    check_indices_before_padding(test_data, max_sessions=10)
 
     # Загружаем и обрабатываем данные
     train_data_processed, test_data_processed, train_mask, test_mask = load_and_process_data(train_data, test_data)
 
     # После паддинга
-    check_indices_after_padding(train_data_processed)  # Для тренировочных данных
-    check_indices_after_padding(test_data_processed)  # Для тестовых данных
-
+    check_indices_after_padding(train_data_processed, max_sessions=10)
+    check_indices_after_padding(test_data_processed, max_sessions=10)
+    
     # Инициализация класса Data с обработанными данными
     train_data = Data(train_data_processed, shuffle=True, n_node=n_node)
     test_data = Data(test_data_processed, shuffle=True, n_node=n_node)

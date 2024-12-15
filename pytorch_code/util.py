@@ -36,15 +36,27 @@ def pad_data(data, max_len=50, pad_value=0):
     return np.array(processed_data, dtype=object)
 
 # Функция для проверки индексов перед паддингом
-def check_indices_before_padding(data):
+def check_indices_before_padding(data, max_sessions=10):
+    """
+    Функция проверяет индексы в сессиях до паддинга.
+    Ограничение по количеству выводимых сессий: max_sessions.
+    """
     for i, session in enumerate(data[0]):
+        if i >= max_sessions:  # Ограничиваем вывод
+            break
         print(f"Session {i+1} indices: {session}")
         print(f"Min index in session {i+1}: {min(session)}")
         print(f"Max index in session {i+1}: {max(session)}")
 
 # Функция для проверки индексов после паддинга
-def check_indices_after_padding(data):
+def check_indices_after_padding(data, max_sessions=10):
+    """
+    Функция проверяет индексы в сессиях после паддинга.
+    Ограничение по количеству выводимых сессий: max_sessions.
+    """
     for i, session in enumerate(data):
+        if i >= max_sessions:  # Ограничиваем вывод
+            break
         print(f"Session {i+1} after padding: {session}")
         print(f"Min index in session {i+1}: {min(session)}")
         print(f"Max index in session {i+1}: {max(session)}")
