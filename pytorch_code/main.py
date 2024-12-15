@@ -67,7 +67,7 @@ def main():
     model = trans_to_cuda(
         DHCN(adjacency=train_data.adjacency, n_node=n_node, lr=opt.lr, l2=opt.l2, beta=opt.beta, layers=opt.layer,
              emb_size=opt.embSize, batch_size=opt.batchSize, dataset=opt.dataset))
-    
+
     # Top K values for evaluating metrics
     top_K = [5, 15, 20]
 

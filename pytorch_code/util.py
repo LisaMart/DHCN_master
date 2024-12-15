@@ -27,7 +27,7 @@ def pad_data(data, max_len=50, pad_value=0):
     processed_data = []
     for session in data:
         # Печать длины сессии для отладки
-        print(f"Session length before padding: {len(session)}")
+        #print(f"Session length before padding: {len(session)}")
 
         if len(session) < max_len:
             # Добавляем padding, если сессия меньше max_len
@@ -37,7 +37,7 @@ def pad_data(data, max_len=50, pad_value=0):
             session = session[:max_len]
 
         # Печать длины сессии после паддинга
-        print(f"Session length after padding: {len(session)}")
+        #print(f"Session length after padding: {len(session)}")
 
         processed_data.append(session)
 
