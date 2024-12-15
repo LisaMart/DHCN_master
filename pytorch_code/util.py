@@ -35,6 +35,20 @@ def pad_data(data, max_len=50, pad_value=0):
 
     return np.array(processed_data, dtype=object)
 
+# Функция для проверки индексов перед паддингом
+def check_indices_before_padding(data):
+    for i, session in enumerate(data[0]):
+        print(f"Session {i+1} indices: {session}")
+        print(f"Min index in session {i+1}: {min(session)}")
+        print(f"Max index in session {i+1}: {max(session)}")
+
+# Функция для проверки индексов после паддинга
+def check_indices_after_padding(data):
+    for i, session in enumerate(data):
+        print(f"Session {i+1} after padding: {session}")
+        print(f"Min index in session {i+1}: {min(session)}")
+        print(f"Max index in session {i+1}: {max(session)}")
+
 # Функция для создания маски
 def create_mask(data, max_len=50):
     """
