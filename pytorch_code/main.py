@@ -2,10 +2,9 @@
 
 import argparse
 import pickle
-from util import Data, split_validation
+from util import Data, split_validation, pad_data, create_mask
 from model import *
 import numpy as np
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', default='diginetica', help='dataset name: diginetica/Tmall/sample')
@@ -21,6 +20,20 @@ parser.add_argument('--filter', type=bool, default=False, help='filter incidence
 opt = parser.parse_args()
 print(opt)
 
+def load_and_process_data(train_data, test_data, max_len=50):
+    """
+    Функция для обработки данных: паддинг и создание масок.
+    """
+    # Применяем padding для сессий
+    train_data_processed = pad_data(train_data[0], max_len=max_len)  # Паддинг для тренировочных данных
+    test_data_processed = pad_data(test_data[0], max_len=max_len)    # Паддинг для тестовых данных
+
+    # Создаем маски для данных (если нужно)
+    train_mask = create_mask(train_data_processed, max_len=max_len)
+    test_mask = create_mask(test_data_processed, max_len=max_len)
+
+    return train_data_processed, test_data_processed, train_mask, test_mask
+
 def main():
     """
     Main function to load the dataset, initialize the model, and start training.
@@ -29,9 +42,6 @@ def main():
     # SERVER
     train_data = pickle.load(open('/root/DHCN_master/datasets/' + opt.dataset + '/train.txt', 'rb'))
     test_data = pickle.load(open('/root/DHCN_master/datasets/' + opt.dataset + '/test.txt', 'rb'))
-
-    # LOCAL - Абсолютный путь
-    #train_data = pickle.load(open('C:/Users/lisa/python_practice/DHCN_master/datasets/' + opt.dataset + '/train.txt', 'rb'))
 
     # LOCAL - Относительный путь
     #train_data = pickle.load(open('../datasets/' + opt.dataset + '/train.txt', 'rb'))
@@ -45,13 +55,17 @@ def main():
     else:
         n_node = 309
 
+    # Загружаем и обрабатываем данные
+    train_data_processed, test_data_processed, train_mask, test_mask = load_and_process_data(train_data, test_data)
+
     # Initialize the Data class with the training and test data
-    train_data = Data(train_data, shuffle=True, n_node=n_node)
-    test_data = Data(test_data, shuffle=True, n_node=n_node)
+    train_data = Data(train_data_processed, shuffle=True, n_node=n_node)
+    test_data = Data(test_data_processed, shuffle=True, n_node=n_node)
 
     # Initialize the DHCN model and move it to GPU (if available)
-    model = trans_to_cuda(DHCN(adjacency=train_data.adjacency,n_node=n_node,lr=opt.lr, l2=opt.l2, beta=opt.beta, layers=opt.layer,emb_size=opt.embSize, batch_size=opt.batchSize,dataset=opt.dataset))
-
+    model = trans_to_cuda(
+        DHCN(adjacency=train_data.adjacency, n_node=n_node, lr=opt.lr, l2=opt.l2, beta=opt.beta, layers=opt.layer,
+             emb_size=opt.embSize, batch_size=opt.batchSize, dataset=opt.dataset))
     # Top K values for evaluating metrics
     top_K = [5, 15, 20]
 

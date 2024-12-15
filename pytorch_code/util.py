@@ -19,6 +19,32 @@ def data_masks(all_sessions, n_node):
 
     return matrix
 
+# Функция для добавления padding к данным
+def pad_data(data, max_len=50, pad_value=0):
+    """
+    Функция для добавления padding (выравнивание длины сессий).
+    """
+    processed_data = []
+    for session in data:
+        if len(session) < max_len:
+            # Добавляем padding, если сессия меньше max_len
+            session = session + [pad_value] * (max_len - len(session))
+        else:
+            # Обрезаем, если сессия больше max_len
+            session = session[:max_len]
+        processed_data.append(session)
+    return np.array(processed_data, dtype=object)
+
+# Функция для создания маски
+def create_mask(data, max_len=50):
+    """
+    Функция для создания маски: 1 для реальных элементов и 0 для padding.
+    """
+    mask = np.zeros((len(data), max_len), dtype=bool)
+    for i, session in enumerate(data):
+        mask[i, :len(session)] = 1  # Маска True для всех реальных элементов
+    return mask
+
 # Function to split the dataset into train and validation sets
 def split_validation(train_set, valid_portion):
     train_set_x, train_set_y = train_set

@@ -1,2 +1,4 @@
 .idea/
 __pycache__/
+test_data_output.txt
+train_data_output.txt
