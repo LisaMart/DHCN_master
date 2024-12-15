@@ -27,15 +27,15 @@ def main():
     """
 
     # SERVER
-    #train_data = pickle.load(open('/root/DHCN_master/datasets/' + opt.dataset + '/train.txt', 'rb'))
-    #test_data = pickle.load(open('/root/DHCN_master/datasets/' + opt.dataset + '/test.txt', 'rb'))
+    train_data = pickle.load(open('/root/DHCN_master/datasets/' + opt.dataset + '/train.txt', 'rb'))
+    test_data = pickle.load(open('/root/DHCN_master/datasets/' + opt.dataset + '/test.txt', 'rb'))
 
     # LOCAL - Абсолютный путь
     #train_data = pickle.load(open('C:/Users/lisa/python_practice/DHCN_master/datasets/' + opt.dataset + '/train.txt', 'rb'))
 
     # LOCAL - Относительный путь
-    train_data = pickle.load(open('../datasets/' + opt.dataset + '/train.txt', 'rb'))
-    test_data = pickle.load(open('../datasets/' + opt.dataset + '/test.txt', 'rb'))
+    #train_data = pickle.load(open('../datasets/' + opt.dataset + '/train.txt', 'rb'))
+    #test_data = pickle.load(open('../datasets/' + opt.dataset + '/test.txt', 'rb'))
 
     # Determine the number of nodes based on the selected dataset
     if opt.dataset == 'diginetica':
