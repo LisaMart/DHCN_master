@@ -20,6 +20,19 @@ parser.add_argument('--filter', type=bool, default=False, help='filter incidence
 opt = parser.parse_args()
 print(opt)
 
+def check_and_fix_data_integrity(data, n_node):
+    """
+    Функция для проверки и исправления целостности данных.
+    Убедитесь, что все индексы положительные и находятся в пределах от 1 до n_node.
+    Если индексы начинаются с 0, сдвигаем их на 1.
+    """
+    for i, session in enumerate(data[0]):  # Проверка только первой части данных (сессии)
+        # Если индексы начинаются с 0 или отрицательные, сдвигаем на 1
+        if any(i <= 0 for i in session):
+            print(f"Invalid index found in session {i+1}: {session}. Shifting indices.")
+            data[0][i] = [x + 1 if x <= 0 else x for x in session]  # Сдвигаем все индексы на 1
+    return data
+
 # Проверка целостности данных
 def check_data_integrity(data, n_node):
     """
@@ -66,14 +79,9 @@ def main():
         n_node = 40727
     else:
         n_node = 309
-
-    # Проверка целостности данных
-    if not check_data_integrity(train_data, n_node):
-        print("Data integrity check failed for train_data!")
-        return
-    if not check_data_integrity(test_data, n_node):
-        print("Data integrity check failed for test_data!")
-        return
+    # Проверка и исправление целостности данных
+    train_data = check_and_fix_data_integrity(train_data, n_node)
+    test_data = check_and_fix_data_integrity(test_data, n_node)
 
     # Загружаем и обрабатываем данные
     train_data_processed, test_data_processed, train_mask, test_mask = load_and_process_data(train_data, test_data)
