@@ -20,18 +20,21 @@ parser.add_argument('--filter', type=bool, default=False, help='filter incidence
 opt = parser.parse_args()
 print(opt)
 
-# Функция для проверки и исправления целостности данных
 def check_and_fix_data_integrity(data, n_node):
     """
     Функция для проверки и исправления целостности данных.
     Убедитесь, что все индексы положительные и находятся в пределах от 1 до n_node.
-    Если индексы начинаются с 0, сдвигаем их на 1.
+    Если индексы начинаются с 0 или отрицательные, сдвигаем их на 1.
     """
     for i, session in enumerate(data[0]):  # Проверка только первой части данных (сессии)
         # Если индексы начинаются с 0 или отрицательные, сдвигаем на 1
         if any(i <= 0 for i in session):
             print(f"Invalid index found in session {i+1}: {session}. Shifting indices.")
             data[0][i] = [x + 1 if x <= 0 else x for x in session]  # Сдвигаем все индексы на 1
+        # Убедимся, что индексы в пределах от 1 до n_node
+        if any(i > n_node for i in session):
+            print(f"Invalid index found in session {i+1}: {session}. Fixing indices.")
+            data[0][i] = [x if x <= n_node else n_node for x in session]  # Обрезаем индексы, если они выходят за пределы
     return data
 
 # Функция для обработки данных: паддинг и создание масок
