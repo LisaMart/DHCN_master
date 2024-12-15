@@ -20,6 +20,7 @@ parser.add_argument('--filter', type=bool, default=False, help='filter incidence
 opt = parser.parse_args()
 print(opt)
 
+# Функция для обработки данных: паддинг и создание масок.
 def load_and_process_data(train_data, test_data, max_len=50):
     """
     Функция для обработки данных: паддинг и создание масок.
@@ -55,17 +56,18 @@ def main():
     else:
         n_node = 309
 
-    # Загружаем и обрабатываем данные
+        # Загружаем и обрабатываем данные
     train_data_processed, test_data_processed, train_mask, test_mask = load_and_process_data(train_data, test_data)
 
-    # Initialize the Data class with the training and test data
+    # Инициализация класса Data с обработанными данными
     train_data = Data(train_data_processed, shuffle=True, n_node=n_node)
     test_data = Data(test_data_processed, shuffle=True, n_node=n_node)
 
-    # Initialize the DHCN model and move it to GPU (if available)
+    # Инициализация модели DHCN и перенос ее на GPU (если доступно)
     model = trans_to_cuda(
         DHCN(adjacency=train_data.adjacency, n_node=n_node, lr=opt.lr, l2=opt.l2, beta=opt.beta, layers=opt.layer,
              emb_size=opt.embSize, batch_size=opt.batchSize, dataset=opt.dataset))
+    
     # Top K values for evaluating metrics
     top_K = [5, 15, 20]
 
