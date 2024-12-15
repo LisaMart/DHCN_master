@@ -20,7 +20,18 @@ parser.add_argument('--filter', type=bool, default=False, help='filter incidence
 opt = parser.parse_args()
 print(opt)
 
-# Функция для обработки данных: паддинг и создание масок.
+# Проверка целостности данных
+def check_data_integrity(data, n_node):
+    """
+    Функция для проверки целостности данных.
+    Убедитесь, что все индексы положительные и находятся в пределах от 1 до n_node.
+    """
+    for session in data[0]:  # Проверка только первой части данных (сессии)
+        if any(i <= 0 or i > n_node for i in session):  # Проверка на отрицательные и нулевые индексы
+            print(f"Invalid index found in session: {session}")
+            return False
+    return True
+
 def load_and_process_data(train_data, test_data, max_len=50):
     """
     Функция для обработки данных: паддинг и создание масок.
@@ -48,7 +59,7 @@ def main():
     #train_data = pickle.load(open('../datasets/' + opt.dataset + '/train.txt', 'rb'))
     #test_data = pickle.load(open('../datasets/' + opt.dataset + '/test.txt', 'rb'))
 
-    # Determine the number of nodes based on the selected dataset
+    # Определяем количество узлов на основе выбранного датасета
     if opt.dataset == 'diginetica':
         n_node = 43097
     elif opt.dataset == 'Tmall':
@@ -56,7 +67,15 @@ def main():
     else:
         n_node = 309
 
-        # Загружаем и обрабатываем данные
+    # Проверка целостности данных
+    if not check_data_integrity(train_data, n_node):
+        print("Data integrity check failed for train_data!")
+        return
+    if not check_data_integrity(test_data, n_node):
+        print("Data integrity check failed for test_data!")
+        return
+
+    # Загружаем и обрабатываем данные
     train_data_processed, test_data_processed, train_mask, test_mask = load_and_process_data(train_data, test_data)
 
     # Инициализация класса Data с обработанными данными

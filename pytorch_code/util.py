@@ -19,15 +19,15 @@ def data_masks(all_sessions, n_node):
 
     return matrix
 
-# Функция для добавления padding (выравнивание длины сессий)
 def pad_data(data, max_len=50, pad_value=0):
     """
     Функция для добавления padding (выравнивание длины сессий).
     """
     processed_data = []
-    for session in data:
-        # Печать длины сессии для отладки
-        #print(f"Session length before padding: {len(session)}")
+    for i, session in enumerate(data):
+        # Печать только первых 10 сессий для отладки
+        if i < 10:
+            print(f"Session {i + 1} length before padding: {len(session)}")
 
         if len(session) < max_len:
             # Добавляем padding, если сессия меньше max_len
@@ -36,8 +36,8 @@ def pad_data(data, max_len=50, pad_value=0):
             # Обрезаем, если сессия больше max_len
             session = session[:max_len]
 
-        # Печать длины сессии после паддинга
-        #print(f"Session length after padding: {len(session)}")
+        if i < 10:
+            print(f"Session {i + 1} length after padding: {len(session)}")
 
         processed_data.append(session)
 
